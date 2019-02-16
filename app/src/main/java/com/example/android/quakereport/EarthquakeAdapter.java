@@ -21,7 +21,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         View listItemView = convertView;
         if (listItemView == null){
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    android.R.layout.earthquake_list_item, parent,false);
+                    R.layout.earquake_list_item,parent,false);
         }
 
         EarthquakeConstructor currentEarthquake = getItem(position);
