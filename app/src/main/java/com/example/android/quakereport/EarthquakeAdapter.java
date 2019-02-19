@@ -41,17 +41,17 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         String stringLocationcn = currentEarthquake.getmLocation();
         String[] locationArray = stringLocationcn.split("(?<=of)");
         switch (locationArray.length){
-            case 0: locationCompass.setText("Near The");
+            case 1: locationCompass.setText("Near The");
                 locationview.setText(locationArray[0]);
             break;
-            case 1: locationCompass.setText(locationArray[0]);
+            case 2: locationCompass.setText(locationArray[0]);
                     locationview.setText(locationArray[1]);
             break;
             default:
                 Log.d("EarthquakeAdapter","Location slip fail at EartquakeAdapter");
         }
 
-        /*
+        /*Using the switch case instead
           if (locationArray.length == 0) {
             locationCompass.setText("Near The");
             locationview.setText(locationArray[0]);
