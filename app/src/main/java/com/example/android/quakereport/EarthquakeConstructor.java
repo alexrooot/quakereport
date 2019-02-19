@@ -8,13 +8,16 @@ public class EarthquakeConstructor {
 
     private String mDate;
 
+    private String mTime;
 
 
-    public EarthquakeConstructor(String magnitude, String location, String date){
+
+    public EarthquakeConstructor(String magnitude, String location, String date, String time){
 
         mMagnitude = magnitude;
         mLocation = location;
         mDate = date;
+        mTime = time;
 
     }
 
@@ -23,6 +26,8 @@ public class EarthquakeConstructor {
     public String getmLocation() { return mLocation;}
 
     public String getmDate() { return mDate;}
+
+    public String getmTime() { return mTime;}
 
 
 

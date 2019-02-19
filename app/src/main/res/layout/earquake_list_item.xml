@@ -15,20 +15,47 @@
         android:layout_weight="1"
         tools:text="8.9"
         />
+
+    <TextView
+        android:id="@+id/compass"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="10 miles north of"/>
     <TextView
         android:id="@+id/location"
+        android:layout_gravity="left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         tools:text="San Fransisco"
         />
-    <TextView
-        android:id="@+id/date"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tools:text="Mar 6, 2013"
-        />
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="Mar 6, 2013"
+            />
+        <TextView
+            android:id="@+id/time"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="10:22"/>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>
