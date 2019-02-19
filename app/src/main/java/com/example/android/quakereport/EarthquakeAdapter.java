@@ -32,7 +32,6 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
 
 
         TextView locationCompass = (TextView) listItemView.findViewById(R.id.compass);
-
         TextView locationview = (TextView) listItemView.findViewById(R.id.location);
         //split the location into two were of ends
         //first get the string
