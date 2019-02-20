@@ -16,11 +16,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-// click listener for recycler adapter
-// make class class RecyclerViewHolder extends......
-//        you need to tell Gradel to use implementation 'com.android.support:design:27.1.1'
-
-
 class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
 
 
@@ -41,10 +36,10 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.earquake_list_item,parent,false);
         }
-
+        // make the temp instance to the constructor that is pulling the override items in
+        // the recycler, use the parameter of "position" its build in parameter of Adapter to point
+        // out what row its displayed
         EarthquakeConstructor currentEarthquake = getItem(position);
-        String eqUrl = currentEarthquake.getmUrl();
-        //convertView.setTag( eqUrl);
 
         TextView magnitudeview = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeview.setText(currentEarthquake.getmMagnitude());
@@ -80,22 +75,6 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
             default:
                 Log.v("EarthquakeAdapter","Location slip fail at EartquakeAdapter");
         }
-
-        /*Using the switch case instead
-          if (locationArray.length == 0) {
-            locationCompass.setText("Near The");
-            locationview.setText(locationArray[0]);
-        }
-        else if ( locationArray.length == 1) {
-            locationCompass.setText(locationArray[0]);
-            locationview.setText(locationArray[1]);
-        }
-            else {
-                Log.d("EarthquakeAdapter","Location slip fail at EartquakeAdapter");
-        }
-         */
-        //locationview.setText(locationArray[0]);
-        //locationCompass.setText(locationArray[1]);
 
         TextView dateview = (TextView) listItemView.findViewById(R.id.date);
         dateview.setText(currentEarthquake.getmDate());
