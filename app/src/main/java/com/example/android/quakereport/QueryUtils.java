@@ -57,10 +57,11 @@ public class QueryUtils {
                 String magnitude =properties.getString("mag");
                 String place = properties.getString("place");
                 String time = properties.getString("time");
+                String urlString = properties.getString("url");
 
 
                 // Set up time
-                //you need to conver the string time to long type
+                //you need to convert the string time to long type
                 long timeinml = Long.parseLong(time);
                 //make and instance for data format and setup up date structure
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,7 +73,7 @@ public class QueryUtils {
 
                 //save the individual elements into and object like and array
                 earthquakes.add(new
-                        EarthquakeConstructor(magnitude, place, timeformated,timeformatedTime));
+                        EarthquakeConstructor(magnitude, place, timeformated,timeformatedTime,urlString));
 
             }
 

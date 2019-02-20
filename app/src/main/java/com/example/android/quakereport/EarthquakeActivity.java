@@ -15,9 +15,16 @@
  */
 package com.example.android.quakereport;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -50,11 +57,38 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         // Create a new {@link ArrayAdapter} of earthquakes
 
-        EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
-
-
+        final EarthquakeAdapter customeObjectAdapter = new EarthquakeAdapter(this, earthquakes);
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(adapter);
+        earthquakeListView.setAdapter(customeObjectAdapter);
+
+
+        // to make ListView/Recycler clickable use this
+        //needs instance call object/refrence so make it before by calling the customAdapter in this case "EarthquakeAdapter"
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // onclick function is in emulation mode from the adapter class/a frees moment
+                //make a temp object of the type element that you are going to pull down from adapter class
+                EarthquakeConstructor currentEartquake;
+                //call the object that has the all the custom data for the adapter in this case its save as "customObjectAdapter"
+                currentEartquake = customeObjectAdapter.getItem(position);
+                //shortcut is EarthquakeConstructor currentEartquake = customeObjectAdapter.getItem(position);
+
+                try{
+                    //To go to browser
+                    //Use a new Intent instance of "Intent.ACTION_VIEW"
+                    //if you need to convert sting to Uri AKA Uniform Resource Locator
+                    Intent goToUSGL = new Intent (Intent.ACTION_VIEW, Uri.parse(currentEartquake.getmUrl()));
+                    //must call the start to this specific Intent
+                    startActivity(goToUSGL);
+                }catch (ActivityNotFoundException e ){
+                    Toast.makeText(getApplicationContext(),"no application can handle this request",Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 }

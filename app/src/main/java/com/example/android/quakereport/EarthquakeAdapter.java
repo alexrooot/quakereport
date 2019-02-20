@@ -1,8 +1,9 @@
 package com.example.android.quakereport;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,48 +19,19 @@ import java.util.List;
 // click listener for recycler adapter
 // make class class RecyclerViewHolder extends......
 //        you need to tell Gradel to use implementation 'com.android.support:design:27.1.1'
-class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    // this is just making object to the row
-    public LinearLayout mrow;
-    // instance to call for ItemClickListener
-    private ItemClickListener itemClickListener;
 
-    //constructor for this class is just a view
-    public RecyclerViewHolder(View itemView) {
-        super(itemView);
-        mrow = (LinearLayout) itemView.findViewById(R.id.row);
-
-        itemView.setOnClickListener(this);
-    }
-    // you need to have it but Item is more cpu intensive than view version.
-    public void setItemClickListener( ItemClickListener itemClickListener){
-        this.itemClickListener = itemClickListener;
-    }
-
-    @Override
-    public void onClick(View v) {
-        itemClickListener.onClick(v, getAdapterPosition());
-    }
-}
 
 class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
 
-    @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position){
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText("you click on ",Toast.LENGTH_SHORT).show();
-            }
-        });
 
-    }
 
 
 
     public  EarthquakeAdapter (Context context, List<EarthquakeConstructor> earthquakeConstructors){
         super(context, 0, earthquakeConstructors);
     }
+
+
 
     
     @Override
@@ -71,6 +43,8 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         }
 
         EarthquakeConstructor currentEarthquake = getItem(position);
+        String eqUrl = currentEarthquake.getmUrl();
+        //convertView.setTag( eqUrl);
 
         TextView magnitudeview = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeview.setText(currentEarthquake.getmMagnitude());
@@ -142,7 +116,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         // convert the string to double with Double.valueOf()
         double mag =Double.valueOf(getmMagnitude);
         //get a default color just in case for the return int value
-        int color = ContextCompat.getColor(getContext(), R.color.magnitude1);
+        int color = ContextCompat.getColor(getContext(), R.color.colorPrimary);
         //round the double number just avoid if statements
         int magFloor = (int) Math.floor(mag);
 
