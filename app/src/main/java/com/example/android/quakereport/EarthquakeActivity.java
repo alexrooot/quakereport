@@ -18,7 +18,12 @@ package com.example.android.quakereport;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,8 +32,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<EarthquakeConstructor>> {
+    private static final String goTo = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
@@ -36,28 +44,20 @@ public class EarthquakeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-        /*
-        // Create a fake list of earthquake locations.
-        ArrayList<EarthquakeConstructor> earthquakes = new ArrayList<>();
-        earthquakes.add(new EarthquakeConstructor("7.2","San Francisco", "Feb 2, 2016"));
-        earthquakes.add(new EarthquakeConstructor("6.1", "London","July 20, 20015"));
-        earthquakes.add(new EarthquakeConstructor("3.9","Tokyo","Nov 10, 2014"));
-        earthquakes.add(new EarthquakeConstructor("5.4", "Mexico City","May 3, 2014"));
-        earthquakes.add(new EarthquakeConstructor("2.8", "Moscow", "Jan 31, 2013"));
-        earthquakes.add(new EarthquakeConstructor("4.9", "rio de Janeiro","Aug 19, 2012"));
-        earthquakes.add(new EarthquakeConstructor("1.6", "Paris", "Oct 30, 2011"));
-        int r = earthquakes.lastIndexOf(earthquakes);
-        */
 
 
-        ArrayList<EarthquakeConstructor> earthquakes = QueryUtils.extractEarthquakes();
+        //EarthquakeAsync task = new EarthquakeAsync();
+        //task.execute(goTo);
 
+    }
+
+    private void updateUI(ArrayList<EarthquakeConstructor> earthquakeConstructorsData) {
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
         // Create a new {@link ArrayAdapter} of earthquakes
 
-        final EarthquakeAdapter customeObjectAdapter = new EarthquakeAdapter(this, earthquakes);
+        final EarthquakeAdapter customeObjectAdapter = new EarthquakeAdapter(this, earthquakeConstructorsData);
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(customeObjectAdapter);
@@ -88,7 +88,45 @@ public class EarthquakeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    @NonNull
+    @Override
+    public Loader<List<EarthquakeConstructor>> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> earthquakeConstructors) {
 
     }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<EarthquakeConstructor>> loader) {
+
+    }
+
+
+    // this class returns background treads and needs to be extended
+// from AsyncTask<input, status update type, return>
+    private class EarthquakeAsync extends AsyncTask<String,Void,ArrayList<EarthquakeConstructor>>{
+// you need to high light the red underline or control+o to make the this overwrite work
+        @Override
+        //this is what we are going to take in
+        protected ArrayList doInBackground(String... strings) {
+            ArrayList<EarthquakeConstructor> results = Utils.feachEarthquakeDate(goTo);
+            return results;
+        }
+
+        //You need to click control+o and do the overwrite
+        @Override//             this what we are returning to the method update and
+        //                      just pass along the same parameter
+        protected void onPostExecute(ArrayList<EarthquakeConstructor> earthquakeConstructors) {
+            updateUI(earthquakeConstructors);
+        }
+    }
+
+
 }
+
+
