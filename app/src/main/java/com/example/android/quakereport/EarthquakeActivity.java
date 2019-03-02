@@ -16,6 +16,7 @@
 package com.example.android.quakereport;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,15 +28,15 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<EarthquakeConstructor>> {
-    private static final String goTo = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+    public static final String goTo = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
@@ -48,6 +49,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         //EarthquakeAsync task = new EarthquakeAsync();
         //task.execute(goTo);
+
+        getLoaderManager().initLoader(1,null,this).forceLoad();
 
     }
 
@@ -89,22 +92,32 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
     }
+    //make a useful instance the EarthquakeAdapter class to pass in data.
+    EarthquakeAdapter mAdapter = new EarthquakeAdapter(null,null);
 
     @NonNull
     @Override
     public Loader<List<EarthquakeConstructor>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return null;
+        EarthquakeLoader backgroundResults = new EarthquakeLoader(this, goTo);
+        return backgroundResults;
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> earthquakeConstructors) {
+    //clear the adapter
+        mAdapter.clear();
 
+        if (earthquakeConstructors != null && !earthquakeConstructors.isEmpty()){
+            mAdapter.addAll(earthquakeConstructors);
+        }
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<EarthquakeConstructor>> loader) {
+        mAdapter.clear();
 
     }
+
 
 
     // this class returns background treads and needs to be extended
