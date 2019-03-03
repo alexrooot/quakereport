@@ -50,7 +50,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         //EarthquakeAsync task = new EarthquakeAsync();
         //task.execute(goTo);
 
-        getLoaderManager().initLoader(1,null,this).forceLoad();
+
+        getLoaderManager().initLoader(1,null, (android.app.LoaderManager.LoaderCallbacks<Object>) this).forceLoad();
 
     }
 
