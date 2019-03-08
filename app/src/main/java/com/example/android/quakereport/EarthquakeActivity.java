@@ -15,22 +15,35 @@
  */
 package com.example.android.quakereport;
 
+import android.content.Loader;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity
+        //need to import this liberies first or you will be lost in errors
+        //import android.content.Loader;
+        //import android.app.LoaderManager;
+        //import android.app.LoaderManager.LoaderCallbacks;
+        implements LoaderCallbacks<List<EarthquakeConstructor>>{
+    // Also implement this methods onCreateLoader, onLoadFinished, onLoaderReset
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
+
+    private static final String USGS_REQUESTED_URL =
+            "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,8 @@ public class EarthquakeActivity extends AppCompatActivity {
         earthquakes.add(new EarthquakeConstructor("1.6", "Paris", "Oct 30, 2011"));
         int r = earthquakes.lastIndexOf(earthquakes);
         */
+
+
 
 
         ArrayList<EarthquakeConstructor> earthquakes = QueryUtils.extractEarthquakes();
@@ -89,6 +104,47 @@ public class EarthquakeActivity extends AppCompatActivity {
             }
         });
 
+
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(1,null,this);
+        Log.e(LOG_TAG,"Loader manager finished");
+
+
+    }
+
+    @Override
+    public Loader<List<EarthquakeConstructor>> onCreateLoader(int id, Bundle args) {
+        Log.e(LOG_TAG, "going call class EarquakeLoader");
+        /*
+        //you need to copy this import classes as they are exclusive to this Loader version
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.content.AsyncTaskLoader;
+import java.util.List;
+         */
+        return new EarthquakeLoader(this,USGS_REQUESTED_URL);
+
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> data) {
+        Log.e(LOG_TAG,"On Load finish is starting");
+        //set up an Adapter so we can use the data return from onCreateLoader
+        EarthquakeAdapter mEarthquakeAdapter ;
+        mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
+        mEarthquakeAdapter.clear();
+        mEarthquakeAdapter.addAll(data);
+        Log.e(LOG_TAG,"We send the list array to the adapter");
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<EarthquakeConstructor>> loader) {
+        EarthquakeAdapter mEarthquakeAdapter ;
+        mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
+        mEarthquakeAdapter.clear();
 
     }
 }
