@@ -38,7 +38,7 @@ public class QueryUtils {
      * Return a list of {@link EarthquakeConstructor} objects that has been built up from
      * parsing a JSON response.
      */
-    public static ArrayList<EarthquakeConstructor> extractEarthquakes() {
+    public static ArrayList<EarthquakeConstructor> extractEarthquakes(JSONObject fileJSON) {
 
         // Create an empty ArrayList that we can start adding earthquakes to
         ArrayList<EarthquakeConstructor> earthquakes = new ArrayList<>();

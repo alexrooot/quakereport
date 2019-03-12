@@ -26,7 +26,7 @@ public class EarthquakeLoader extends AsyncTaskLoader {
         super(context);
         mainActivityStringUrl = url;
         Log.e(LOG_TAG,"inside EathquakeLoader we got the string url");
-    }
+}
 
     @Nullable
     @Override

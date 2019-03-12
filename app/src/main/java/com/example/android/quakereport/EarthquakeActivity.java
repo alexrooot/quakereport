@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -63,12 +64,13 @@ public class EarthquakeActivity extends AppCompatActivity
         */
 
 
+        TextView emptylist = (TextView) findViewById(R.id.EmptyTestView);
 
 
         ArrayList<EarthquakeConstructor> earthquakes = QueryUtils.extractEarthquakes();
 
         // Find a reference to the {@link ListView} in the layout
-        ListView earthquakeListView = (ListView) findViewById(R.id.list);
+        ListView earthquakeListView = (ListView) findViewById(R.id.list);;
 
         // Create a new {@link ArrayAdapter} of earthquakes
 
