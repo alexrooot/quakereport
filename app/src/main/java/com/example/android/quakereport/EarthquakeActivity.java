@@ -132,19 +132,19 @@ import java.util.List;
     public void onLoadFinished(Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> data) {
         Log.e(LOG_TAG,"On Load finish is starting");
         //set up an Adapter so we can use the data return from onCreateLoader
-        EarthquakeAdapter mEarthquakeAdapter ;
-        mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
-        mEarthquakeAdapter.clear();
-        mEarthquakeAdapter.addAll(data);
+        //EarthquakeAdapter mEarthquakeAdapter ;
+        //mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
+       // mEarthquakeAdapter.clear();
+       // mEarthquakeAdapter.addAll(data);
         Log.e(LOG_TAG,"We send the list array to the adapter");
 
     }
 
     @Override
     public void onLoaderReset(Loader<List<EarthquakeConstructor>> loader) {
-        EarthquakeAdapter mEarthquakeAdapter ;
-        mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
-        mEarthquakeAdapter.clear();
+        //EarthquakeAdapter mEarthquakeAdapter ;
+       // mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
+        //mEarthquakeAdapter.clear();
 
     }
 }
