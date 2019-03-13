@@ -8,6 +8,7 @@ import android.content.AsyncTaskLoader;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EarthquakeLoader extends AsyncTaskLoader {
@@ -36,7 +37,7 @@ public class EarthquakeLoader extends AsyncTaskLoader {
             return null;
         }
         Log.e(LOG_TAG,"calling on the class Utils from EarthquakeLoader");
-        List<EarthquakeConstructor> results = Utils.feachEarthquakeData(mainActivityStringUrl);
+        ArrayList<EarthquakeConstructor> results = (ArrayList<EarthquakeConstructor>) Utils.feachEarthquakeData(mainActivityStringUrl);
         //Toast.makeText(getContext(),"Your Message", Toast.LENGTH_LONG).show();
         return results;
     }
