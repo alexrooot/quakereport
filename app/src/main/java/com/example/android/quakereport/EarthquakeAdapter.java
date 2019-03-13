@@ -17,13 +17,14 @@ import android.widget.Toast;
 import java.util.List;
 
 class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
-
+    final String LOG_TAG = EarthquakeAdapter.class.getSimpleName();
 
 
 
 
     public  EarthquakeAdapter (Context context, List<EarthquakeConstructor> earthquakeConstructors){
         super(context, 0, earthquakeConstructors);
+        Log.e(LOG_TAG,"we got into the cunstructor for class EarthquakeAdapter");
     }
 
 
@@ -31,15 +32,18 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
     
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
+        Log.e(LOG_TAG, "getView Overwrite start");
         View listItemView = convertView;
         if (listItemView == null){
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.earquake_list_item,parent,false);
+            Log.e(LOG_TAG,"We have started the infalter of listview");
         }
         // make the temp instance to the constructor that is pulling the override items in
         // the recycler, use the parameter of "position" its build in parameter of Adapter to point
         // out what row its displayed
         EarthquakeConstructor currentEarthquake = getItem(position);
+        Log.e(LOG_TAG,"We got the position varaible on getview");
 
         TextView magnitudeview = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeview.setText(currentEarthquake.getmMagnitude());
@@ -66,10 +70,13 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         String stringLocationcn = currentEarthquake.getmLocation();
         String[] locationArray = stringLocationcn.split("(?<=of)");
         switch (locationArray.length){
+
             case 1: locationCompass.setText("Near The");
+                Log.e(LOG_TAG,"case1 switch statment locationArray from overwrite getview");
                 locationview.setText(locationArray[0]);
             break;
             case 2: locationCompass.setText(locationArray[0]);
+                Log.e(LOG_TAG,"case2 switch statment locationArray from overwrite getview");
                     locationview.setText(locationArray[1]);
             break;
             default:
@@ -92,6 +99,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
 
     // this class will just return a color that was given in the layout resources but its called above
     private int getMagnitudeColor(String getmMagnitude) {
+        Log.e(LOG_TAG,"Getting the color base on value of Earthquake from getMagnitudeColor");
         // convert the string to double with Double.valueOf()
         double mag =Double.valueOf(getmMagnitude);
         //get a default color just in case for the return int value
@@ -136,6 +144,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
 
 
         }
+        Log.e(LOG_TAG,"We are returning color"+color);
         return ContextCompat.getColor(getContext(), color);
     }
 }

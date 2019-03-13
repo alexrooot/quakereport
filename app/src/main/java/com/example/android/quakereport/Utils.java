@@ -40,7 +40,7 @@ public class Utils {
         ArrayList<EarthquakeConstructor> earthquake = extractFeatureFromJson(jsonResponse);
 
 
-
+        Log.e(LOG_TAG, "Returning a ArrayList<EarthquakeConstructor> earthquake");
         return earthquake;
     }
 
@@ -90,6 +90,7 @@ public class Utils {
             Log.e(LOG_TAG,"Could phrase string into JSON");
             e.printStackTrace();
         }
+        Log.e(LOG_TAG,"returning a list ArrayList<EarthquakeConstructor> earthquakelistfromPrase");
         return  earthquakelistfromPrase;
 
 

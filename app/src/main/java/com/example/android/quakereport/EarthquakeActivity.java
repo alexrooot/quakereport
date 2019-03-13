@@ -27,8 +27,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,67 +45,12 @@ public class EarthquakeActivity extends AppCompatActivity
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
     private static final String USGS_REQUESTED_URL =
-            "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2019-01-01&endtime=2019-12-01&minmagnitude=9";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-        /*
-        // Create a fake list of earthquake locations.
-        ArrayList<EarthquakeConstructor> earthquakes = new ArrayList<>();
-        earthquakes.add(new EarthquakeConstructor("7.2","San Francisco", "Feb 2, 2016"));
-        earthquakes.add(new EarthquakeConstructor("6.1", "London","July 20, 20015"));
-        earthquakes.add(new EarthquakeConstructor("3.9","Tokyo","Nov 10, 2014"));
-        earthquakes.add(new EarthquakeConstructor("5.4", "Mexico City","May 3, 2014"));
-        earthquakes.add(new EarthquakeConstructor("2.8", "Moscow", "Jan 31, 2013"));
-        earthquakes.add(new EarthquakeConstructor("4.9", "rio de Janeiro","Aug 19, 2012"));
-        earthquakes.add(new EarthquakeConstructor("1.6", "Paris", "Oct 30, 2011"));
-        int r = earthquakes.lastIndexOf(earthquakes);
-        */
-
-
-
-
-        ArrayList<EarthquakeConstructor> earthquakes = QueryUtils.extractEarthquakes();
-
-        // Find a reference to the {@link ListView} in the layout
-        ListView earthquakeListView = (ListView) findViewById(R.id.list);
-
-        // Create a new {@link ArrayAdapter} of earthquakes
-
-        final EarthquakeAdapter customeObjectAdapter = new EarthquakeAdapter(this, earthquakes);
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(customeObjectAdapter);
-
-
-        // to make ListView/Recycler clickable use this
-        //needs instance call object/refrence so make it before by calling the customAdapter in this case "EarthquakeAdapter"
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // onclick function is in emulation mode from the adapter class/a frees moment
-                //make a temp object of the type element that you are going to pull down from adapter class
-                EarthquakeConstructor currentEartquake;
-                //call the object that has the all the custom data for the adapter in this case its save as "customObjectAdapter"
-                currentEartquake = customeObjectAdapter.getItem(position);
-                //shortcut is EarthquakeConstructor currentEartquake = customeObjectAdapter.getItem(position);
-
-                try{
-                    //To go to browser
-                    //Use a new Intent instance of "Intent.ACTION_VIEW"
-                    //if you need to convert sting to Uri AKA Uniform Resource Locator
-                    Intent goToUSGL = new Intent (Intent.ACTION_VIEW, Uri.parse(currentEartquake.getmUrl()));
-                    //must call the start to this specific Intent
-                    startActivity(goToUSGL);
-                }catch (ActivityNotFoundException e ){
-                    Toast.makeText(getApplicationContext(),"no application can handle this request",Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
-        });
-
 
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(1,null,this);
@@ -126,17 +73,46 @@ import java.util.List;
         return new EarthquakeLoader(this,USGS_REQUESTED_URL);
 
     }
+    public void UI (List<EarthquakeConstructor> results){
+        Log.e(LOG_TAG, "UI is going to be updated");
+        ListView listView = (ListView) findViewById(R.id.list);//find xml listview
+        TextView emptyListView = (TextView) findViewById(R.id.emptyListView);//find the textview for empty message
+        listView.setEmptyView(emptyListView);//setup #listview with and empty alternative message
+        final EarthquakeAdapter adapterresults = new EarthquakeAdapter(this,results);//setup #adapter with list<EarthquakeContructor> data>
+        listView.setAdapter(adapterresults);//start #listview with adapter data
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()/*listView attaches to SetOnItemClickListener */
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EarthquakeConstructor curentEarthquake ;//each item/list has an object of type EarthquakeConstructor
+                curentEarthquake = adapterresults.getItem(position);//adapterresults is the list, get each list/row position index
+                try{ Log.e(LOG_TAG,"On click is trying to go to an item clicked");
+                    Intent goWebSite = new Intent(Intent.ACTION_VIEW, Uri.parse(curentEarthquake.getmUrl()));//Uri is local Universal resource identifier
+                    startActivity(goWebSite);//startActivity on # goWebSite
+                }catch (ActivityNotFoundException e ){
+                    Toast.makeText(getApplicationContext(),"no application can handle this request",Toast.LENGTH_SHORT).show();
+                    Log.e(LOG_TAG, "Unable to use url or not present to interpite");
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
 
 
     @Override
     public void onLoadFinished(Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> data) {
         Log.e(LOG_TAG,"On Load finish is starting");
         //set up an Adapter so we can use the data return from onCreateLoader
-        //EarthquakeAdapter mEarthquakeAdapter ;
-        //mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
-       // mEarthquakeAdapter.clear();
+        EarthquakeAdapter mEarthquakeAdapter ;
+        mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
+        mEarthquakeAdapter.clear();// just clear adapter data from last time used
        // mEarthquakeAdapter.addAll(data);
         Log.e(LOG_TAG,"We send the list array to the adapter");
+        ListView listView = (ListView) findViewById(R.id.list);
+
+        UI(data);
 
     }
 
