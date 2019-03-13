@@ -25,10 +25,16 @@ import java.util.List;
 public class Utils {
 
     public  static final String LOG_TAG = Utils.class.getSimpleName();
+    private boolean downloading = false;
 
     public static List<EarthquakeConstructor> feachEarthquakeData (String requestedURL){
-        Log.e(LOG_TAG,"inside the Utils class")
-                ;
+        Log.e(LOG_TAG,"inside the Utils class");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //variable used in cases for no responses
         String jsonResponse = null;
         //make a URL type from the string

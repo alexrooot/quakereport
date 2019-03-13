@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +44,11 @@ public class EarthquakeActivity extends AppCompatActivity
     // Also implement this methods onCreateLoader, onLoadFinished, onLoaderReset
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
-
     private static final String USGS_REQUESTED_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+    private ListView listView;
+    private TextView emptyListView;
+    private ProgressBar mainProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +78,22 @@ import java.util.List;
     @Override
     public void onLoadFinished(Loader<List<EarthquakeConstructor>> loader, List<EarthquakeConstructor> data) {
         Log.e(LOG_TAG,"On Load finish is starting");
-        //set up an Adapter so we can use the data return from onCreateLoader
-        //EarthquakeAdapter mEarthquakeAdapter ;
-        //mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
-       // mEarthquakeAdapter.clear();
-       // mEarthquakeAdapter.addAll(data);
-       // Log.e(LOG_TAG,"We send the list array to the adapter");
-       // List<EarthquakeConstructor> results = data;
-        //Log.e(LOG_TAG,"made a local variable of data and will call on the UI method");
-        UI(data);
+        UI(data);//UI material should run on main tread all the time.
+
+        emptyListView.setText(R.string.no_earthquakes);
+        Log.e(LOG_TAG,"Generated text for empty text message of listview");
+        mainProgressBar =  findViewById(R.id.loading_spinner);
+        Log.e(LOG_TAG,"making progress bar visible to java");
+        mainProgressBar.setVisibility(View.GONE);
+        Log.e(LOG_TAG,"made the progress bar be deleted from XML");
 
     }
     public void UI(List<EarthquakeConstructor> data){
         Log.e(LOG_TAG,"started medthod UI");
-        ListView listView = (ListView) findViewById(R.id.list);
-        Log.e(LOG_TAG,"made list view avalibe to java");
+        listView = (ListView) findViewById(R.id.list);// create in main class
+        emptyListView = (TextView) findViewById(R.id.EmptyTestView);// created in main class
+        Log.e(LOG_TAG,"made list & text view available to java");
+        listView.setEmptyView(emptyListView);//needs to sibling of listview in xml layout
         EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(this,data);
         Log.e(LOG_TAG,"passed in the adapter the list of earthquakes");
         listView.setAdapter(earthquakeAdapter);
@@ -97,10 +101,7 @@ import java.util.List;
     }
     @Override
     public void onLoaderReset(Loader<List<EarthquakeConstructor>> loader) {
-        //EarthquakeAdapter mEarthquakeAdapter ;
-       // mEarthquakeAdapter = new EarthquakeAdapter(this,new ArrayList<EarthquakeConstructor>());
-        //mEarthquakeAdapter.clear();
-
+        Log.e(LOG_TAG,"we are on onLoaderReset");
     }
 
 }

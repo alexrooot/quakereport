@@ -28,7 +28,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
     
     @Override
     public View getView(int position,  View convertView, ViewGroup parent) {
-        Log.e(LOG_TAG,"going to start to infalte the recycler");
+        Log.e(LOG_TAG,position+": going to start to infalte the recycler");
         View listItemView = convertView;
         if (listItemView == null){
             listItemView = LayoutInflater.from(getContext()).inflate(
@@ -38,7 +38,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
         // the recycler, use the parameter of "position" its build in parameter of Adapter to point
         // out what row its displayed
         EarthquakeConstructor currentEarthquake = getItem(position);
-        Log.e(LOG_TAG,"Were are getting the position");
+        Log.e(LOG_TAG,position+": Were are getting the position");
         TextView magnitudeview = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeview.setText(currentEarthquake.getmMagnitude());
         // Set the proper background color on the magnitude circle.
@@ -71,7 +71,7 @@ class EarthquakeAdapter extends ArrayAdapter<EarthquakeConstructor> {
                     locationview.setText(locationArray[1]);
             break;
             default:
-                Log.v("EarthquakeAdapter","Location slip fail at EartquakeAdapter");
+                Log.e("EarthquakeAdapter",position+": Location slip fail at EartquakeAdapter");
         }
 
         TextView dateview = (TextView) listItemView.findViewById(R.id.date);
