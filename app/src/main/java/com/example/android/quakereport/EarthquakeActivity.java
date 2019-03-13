@@ -45,7 +45,7 @@ public class EarthquakeActivity extends AppCompatActivity
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
     private static final String USGS_REQUESTED_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2012-01-01&endtime=2012-12-01&minmagnitude=6";
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
