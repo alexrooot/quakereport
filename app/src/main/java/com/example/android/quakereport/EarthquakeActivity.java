@@ -15,11 +15,14 @@
  */
 package com.example.android.quakereport;
 
+import android.content.Context;
 import android.content.Loader;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,9 +57,32 @@ public class EarthquakeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(1,null,this);
-        Log.e(LOG_TAG,"Loader manager finished");
+
+        ConnectivityManager mconnectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Log.e(LOG_TAG,"created a ConnectivityManager");
+        NetworkInfo activeNetwork = mconnectivityManager.getActiveNetworkInfo();
+        Log.e(LOG_TAG,"created NetworkInfo");
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        Log.e(LOG_TAG,"Creating boolean statement of network and its :"+isConnected);
+        if(isConnected == true){
+            Log.e(LOG_TAG,"Created if statement if boolean is true got to back ground loader");
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(1,null,this);
+            Log.e(LOG_TAG,"Loader manager finished");
+        }else{
+            Log.e(LOG_TAG,"else statement there is no network connection");
+            emptyListView = (TextView) findViewById(R.id.EmptyTestView);
+            Log.e(LOG_TAG,"emptyListView is available to java");
+            emptyListView.setText(R.string.no_network_state);
+            Log.e(LOG_TAG,"emptyListView is given a text");
+            listView = findViewById(R.id.list);
+            listView.setEmptyView(emptyListView);
+            Log.e(LOG_TAG,"made the listview empty with some empty information");
+            mainProgressBar = findViewById(R.id.loading_spinner);
+            mainProgressBar.setVisibility(View.GONE);
+
+        }
+
     }
 
     @Override
