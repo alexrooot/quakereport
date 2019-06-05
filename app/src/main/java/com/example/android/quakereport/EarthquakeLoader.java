@@ -28,5 +28,10 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<EarthquakeConstructor
         List<EarthquakeConstructor> results = Utils.feachEarthquakeDate(mUrl);
         return results;
     }
+    //You need the next Override for loadInBackground to start.
+    @Override
+    protected void onStartLoading() {
+        forceLoad();
+    }
 
 }
